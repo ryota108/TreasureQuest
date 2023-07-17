@@ -9,7 +9,7 @@ const types = [
     id: "todo",
     name: "Todo",
     description: "A new task to be completed",
-    color: "bg-red-500",
+    color: "bg-red-600",
   },
   {
     id: "Inprogress",
@@ -51,7 +51,7 @@ const TaskTypeRadioGroup = () => {
                   } ${
                     checked
                       ? `${type.color} bg-opacity-75 text-white`
-                      : "bg-white"
+                      : " bg-slate-700/10 border border-gray-400"
                   } relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none`
                 }
               >
@@ -62,8 +62,8 @@ const TaskTypeRadioGroup = () => {
                         <div className="text-sm">
                           <RadioGroup.Label
                             as="span"
-                            className={`inline ${
-                              checked ? "text-white" : "text-gray-500"
+                            className={`inline mr-1 ${
+                              checked ? "text-white" : "text-white"
                             }`}
                           >
                             {type.name}
@@ -71,7 +71,7 @@ const TaskTypeRadioGroup = () => {
                           <RadioGroup.Description
                             as="span"
                             className={`inline ${
-                              checked ? "text-white" : "text-gray-500"
+                              checked ? "text-white" : "text-white"
                             }`}
                           >
                             <span>{type.description}</span>
