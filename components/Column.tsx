@@ -31,12 +31,12 @@ const Column: React.FC<ColumnProps> = ({ id, todos, index }) => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 className={`p-2 rounded-2xl shadow-sm ${
-                  snapshot.isDraggingOver ? "bg-green-200" : "bg-white/50"
+                  snapshot.isDraggingOver ? "bg-gray-400/10" : "bg-gray-800/50"
                 }`}
               >
-                <h2 className="flex justify-between font-bold text-xl p-2">
+                <h2 className="flex justify-between font-bold text-xl p-2 text-gray-200">
                   {idToColumnText[id]}
-                  <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-2 text-sm  font-normal">
+                  <span className="text-white bg-gray-500/50 rounded-full px-2 py-2 text-sm  font-normal">
                     {todos.length}
                   </span>
                 </h2>
@@ -64,7 +64,7 @@ const Column: React.FC<ColumnProps> = ({ id, todos, index }) => {
                   {provided.placeholder}
 
                   <div className="flex items-end justify-end p-2">
-                    <button className="text-green-500 hover:text-green-600">
+                    <button className="text-blue-400 opacity-50  hover:text-blue-500 hover:opacity-100">
                       <PlusCircleIcon className="h-10 w-10" />
                     </button>
                   </div>
