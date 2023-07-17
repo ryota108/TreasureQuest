@@ -12,8 +12,6 @@ interface BoardState {
   addTask: (
     todo: string,
     columnId: TypedColumn,
-    userID: string,
-    image?: File | null
   ) => void;
   setNewTaskInput: (input: string) => void;
   setNewTaskType: (columnId: TypedColumn) => void;
@@ -77,8 +75,6 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   addTask: async (
     todo: string,
     columnId: TypedColumn,
-    userID: string,
-    image?: File | null
   ) => {
     let file: Image | undefined;
 

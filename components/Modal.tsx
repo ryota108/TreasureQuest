@@ -29,7 +29,7 @@ function Modal() {
   const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if(!newTaskInput) return;
-    addTask(newTaskInput, newTaskType, image);
+    addTask(newTaskInput, newTaskType);
     setImage(null);
     closeModal();
   }
