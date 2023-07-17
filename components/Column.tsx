@@ -42,7 +42,7 @@ const Column: React.FC<ColumnProps> = ({ id, todos, index }) => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`p-2 rounded-2xl shadow-sm ${
+                className={`p-2 rounded-2xl shadow-sm mt-12 ${
                   snapshot.isDraggingOver ? "bg-gray-400/10" : "bg-gray-800/50"
                 }`}
               >
