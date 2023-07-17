@@ -11,7 +11,7 @@ const Board = () => {
       state.board,
       state.getBoard,
       state.setBoardState,
-      state.updateTodoInDb,
+      state.updateTodoInDB,
     ]
   );
   useEffect(() => {
@@ -34,6 +34,7 @@ const Board = () => {
         ...board,
         columns: rearrangedColumns,
       });
+      return
     }
 
     const columns = Array.from(board.columns);

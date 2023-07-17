@@ -36,7 +36,6 @@ export const getTodosGroupedByColumn = async () => {
     }
   }
 
-  console.log(columns);
 
   const sortedColumns = new Map(
     Array.from(columns.entries()).sort(
