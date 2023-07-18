@@ -8,11 +8,10 @@ interface BoardState {
   updateTodoInDB: (todo: Todo, columnId: TypedColumn) => void;
   newTaskInput: string;
   newTaskType: TypedColumn;
+  newAssign: string;
   image: File | null;
-  addTask: (
-    todo: string,
-    columnId: TypedColumn,
-  ) => void;
+  addTask: (todo: string, columnId: TypedColumn, assign: string) => void;
+  setNewAssign: (input: string) => void;
   setNewTaskInput: (input: string) => void;
   setNewTaskType: (columnId: TypedColumn) => void;
   setImage: (image: File | null) => void;
@@ -30,6 +29,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   searchString: "",
   newTaskInput: "",
   newTaskType: "todo",
+  newAssign: "",
   image: null,
   setSearchString: (searchString) => set({ searchString }),
   getBoard: async () => {
@@ -58,6 +58,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
   setNewTaskInput: (input: string) => set({ newTaskInput: input }),
   setNewTaskType: (columnId: TypedColumn) => set({ newTaskType: columnId }),
+  setNewAssign: (input: string) => set({ newAssign: input }),
   setImage: (image: File | null) => set({ image }),
 
   updateTodoInDB: async (todo, columnId) => {
@@ -72,10 +73,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     );
   },
 
-  addTask: async (
-    todo: string,
-    columnId: TypedColumn,
-  ) => {
+  addTask: async (todo: string, columnId: TypedColumn, newAssign?: string) => {
     let file: Image | undefined;
 
     const { $id } = await databases.createDocument(
@@ -85,11 +83,13 @@ export const useBoardStore = create<BoardState>((set, get) => ({
       {
         title: todo,
         status: columnId,
+        assign: newAssign,
         ...(file && { image: JSON.stringify(file) }),
       }
     );
 
     set({ newTaskInput: "" });
+    set({ newAssign: "" });
     set((state) => {
       const newColumns = new Map(state.board.columns);
 
@@ -98,6 +98,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
         $createdAt: new Date().toISOString(),
         title: todo,
         status: columnId,
+        assign: newAssign,
 
         // ...(file && {image: file})
       };

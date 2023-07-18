@@ -4,40 +4,54 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useModalStore } from "@/store/ModalStore";
 import { useBoardStore } from "@/store/BoardStore";
 import TaskTypeRadioGroup from "./TaskTypeRadioGroup";
-import Image from "next/image";
-import { PhotoIcon } from "@heroicons/react/24/solid";
+import { UserCircleIcon } from "@heroicons/react/24/solid";
+
 // import { useUserStore } from "@/store/UserStore";
 
 function Modal() {
   const imagePickerRef = useRef<HTMLInputElement>(null);
   // const userData = useUserStore(state =>state.user);
-  const [addTask, image, setImage, newTaskInput, setNewTaskInput, newTaskType] = useBoardStore(
-    (state) => [
-      state.addTask,
-      state.image,
-      state.setImage,
-      state.newTaskInput,
-      state.setNewTaskInput,
-      state.newTaskType,
-    ]
-  );
+  const [
+    addTask,
+    image,
+    setImage,
+    newTaskInput,
+    setNewTaskInput,
+    newTaskType,
+    newAssign,
+    setNewAssign,
+  ] = useBoardStore((state) => [
+    state.addTask,
+    state.image,
+    state.setImage,
+    state.newTaskInput,
+    state.setNewTaskInput,
+    state.newTaskType,
+    state.newAssign,
+    state.setNewAssign,
+  ]);
   const [isOpen, closeModal] = useModalStore((state) => [
     state.isOpen,
     state.closeModal,
   ]);
 
-  const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(!newTaskInput) return;
-    addTask(newTaskInput, newTaskType);
+    if (!newTaskInput) return;
+    addTask(newTaskInput, newTaskType, newAssign);
     setImage(null);
     closeModal();
-  }
+  };
 
   return (
     // Use the `Transition` component at the root level
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog onSubmit={handleSubmit} as="form" className="relative z-10" onClose={closeModal}>
+      <Dialog
+        onSubmit={handleSubmit}
+        as="form"
+        className="relative z-10"
+        onClose={closeModal}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -76,10 +90,30 @@ function Modal() {
                     placeholder="Enter a task here..."
                     className="w-full border border-gray-300 bg-transparent rounded-md outline-none p-5 text-white"
                   />
+                  <div className="flex">
+                    <UserCircleIcon className="w-8 h-8 text-white relative top-2 left-1" />
+                    <p className="text-white mt-3 ml-2">
+                      assignee
+                      <span className="opacity-50 ml-2">(optional)</span>
+                    </p>
+                  </div>
+                  <input
+                    type="text"
+                    value={newAssign}
+                    onChange={(e) => setNewAssign(e.target.value)}
+                    placeholder="Who will be in charge of this task? (e.g. ME)"
+                    className="w-full border mt-4 -mb-2 border-gray-300 bg-transparent rounded-md outline-none p-5 text-white"
+                  />
                 </div>
                 <TaskTypeRadioGroup />
                 <div className="mt-4n">
-                <button type="submit" disabled={!newTaskInput} className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-300 disabled:cursor-not-allowed">Add Task</button>
+                  <button
+                    type="submit"
+                    disabled={!newTaskInput}
+                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:bg-gray-500 disabled:text-gray-300 disabled:cursor-not-allowed"
+                  >
+                    Add Task
+                  </button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

@@ -21,12 +21,12 @@ const idToColumnText: {
 const Column: React.FC<ColumnProps> = ({ id, todos, index }) => {
   const [searchString, setNewTaskType] = useBoardStore((state) => [
     state.searchString,
-    state.setNewTaskType
+    state.setNewTaskType,
   ]);
   const openModal = useModalStore((state) => state.openModal);
 
   const handleAddTodo = () => {
-    setNewTaskType(id)
+    setNewTaskType(id);
     openModal();
   };
   return (
