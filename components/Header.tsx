@@ -2,14 +2,41 @@
 
 import Image from "next/image";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import Avatar from "react-avatar";
 import { useBoardStore } from "@/store/BoardStore";
+import { useEffect, useState } from "react";
+import AssignMenu from "./AssignMenu";
 
 const Header = () => {
-  const [searchString, setSearchString] = useBoardStore((state) => [
-    state.searchString,
-    state.setSearchString,
-  ]);
+  const [searchString, setSearchString, assignQuery, setAssignQuery, board] =
+    useBoardStore((state) => [
+      state.searchString,
+      state.setSearchString,
+      state.assignQuery,
+      state.setAssignQuery,
+      state.board,
+    ]);
+
+  const [assignList, setAssignList] = useState<string[]>([]);
+
+  useEffect(() => {
+    let todoAssign = board.columns
+      .get("todo")
+      ?.todos.map((todo) => todo.assign);
+    let inprogressAssign = board.columns
+      .get("Inprogress")
+      ?.todos.map((todo) => todo.assign);
+    let doneAssign = board.columns
+      .get("done")
+      ?.todos.map((todo) => todo.assign);
+    let newArray: string[] = []; // 型アノテーションを追加
+  
+    if (typeof todoAssign !== "undefined" && typeof inprogressAssign !== "undefined" && typeof doneAssign !== "undefined") {
+      newArray = todoAssign.concat(inprogressAssign).concat(doneAssign) as string[];
+    }
+    
+    const assignSet = Array.from(new Set(newArray));
+    setAssignList(assignSet);
+  }, [board]);
 
   return (
     <header>
@@ -38,8 +65,7 @@ const Header = () => {
               Search
             </button>
           </form>
-          <Avatar name="Aran smithee" round color="black" size="50" />
-          {/* Avatar */}
+          <AssignMenu assignList={assignList}/>
         </div>
       </div>
 
