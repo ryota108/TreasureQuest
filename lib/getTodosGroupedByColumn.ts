@@ -20,6 +20,7 @@ export const getTodosGroupedByColumn = async () => {
       $createdAt: todo.$createdAt,
       title: todo.title,
       status: todo.status,
+      assign: todo.assign,
       ...(todo.image && { image: JSON.parse(todo.image) }),
     });
     return acc;
@@ -36,16 +37,15 @@ export const getTodosGroupedByColumn = async () => {
     }
   }
 
-
   const sortedColumns = new Map(
     Array.from(columns.entries()).sort(
       (a, b) => columnTypes.indexOf(a[0]) - columnTypes.indexOf(b[0])
     )
   );
 
-  const board:Board = {
-    columns:sortedColumns
-  }
+  const board: Board = {
+    columns: sortedColumns,
+  };
 
-  return board
+  return board;
 };
