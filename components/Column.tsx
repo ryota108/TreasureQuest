@@ -19,10 +19,12 @@ const idToColumnText: {
 };
 
 const Column: React.FC<ColumnProps> = ({ id, todos, index }) => {
-  const [searchString, setNewTaskType] = useBoardStore((state) => [
+  const [searchString, setNewTaskType, assignQuery] = useBoardStore((state) => [
     state.searchString,
     state.setNewTaskType,
+    state.assignQuery,
   ]);
+  let assigns: string[] = [];
   const openModal = useModalStore((state) => state.openModal);
 
   const handleAddTodo = () => {
@@ -59,7 +61,9 @@ const Column: React.FC<ColumnProps> = ({ id, todos, index }) => {
 
                 <div className="space-y-2">
                   {todos.map((todo, index) => {
-                    if (
+                    assigns.push(todo.assign as string);
+                    if (!todo.assign?.includes(assignQuery)) return null;
+                    else if (
                       searchString &&
                       !todo.title
                         .toLowerCase()
