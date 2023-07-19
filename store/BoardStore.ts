@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { databases, storage, ID } from "@/appwrite";
 interface BoardState {
   board: Board;
-  getBoard: () => void;
+  getBoard: (userID: string) => void;
   setBoardState: (board: Board) => void;
   updateTodoInDB: (todo: Todo, columnId: TypedColumn) => void;
   newTaskInput: string;
@@ -12,7 +12,7 @@ interface BoardState {
   assignQuery: string;
   setAssignQuery: (input: string) => void;
   image: File | null;
-  addTask: (todo: string, columnId: TypedColumn, assign: string) => void;
+  addTask: (todo: string, columnId: TypedColumn,userID: string, assign?: string) => void;
   setNewAssign: (input: string) => void;
   setNewTaskInput: (input: string) => void;
   setNewTaskType: (columnId: TypedColumn) => void;
@@ -35,8 +35,8 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   assignQuery: "",
   image: null,
   setSearchString: (searchString) => set({ searchString }),
-  getBoard: async () => {
-    const board = await getTodosGroupedByColumn();
+  getBoard: async (userID) => {
+    const board = await getTodosGroupedByColumn(userID);
     set({ board });
   },
   setAssignQuery: (input: string) => set({ assignQuery: input }),
@@ -48,10 +48,6 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     newColumns.get(id)?.todos.splice(taskIndex, 1);
 
     set({ board: { columns: newColumns } });
-
-    // if(todo.image) {
-    //     await storage.deleteFile(todo.image.bucketId, todo.image.fileId);
-    // }
 
     await databases.deleteDocument(
       process.env.NEXT_PUBLIC_DATABASE_ID!,
@@ -77,7 +73,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     );
   },
 
-  addTask: async (todo: string, columnId: TypedColumn, newAssign?: string) => {
+  addTask: async (todo: string, columnId: TypedColumn,userID: string, newAssign?: string) => {
     let file: Image | undefined;
 
     const { $id } = await databases.createDocument(
@@ -88,6 +84,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
         title: todo,
         status: columnId,
         assign: newAssign,
+        userID: userID,
         ...(file && { image: JSON.stringify(file) }),
       }
     );
@@ -103,8 +100,6 @@ export const useBoardStore = create<BoardState>((set, get) => ({
         title: todo,
         status: columnId,
         assign: newAssign,
-
-        // ...(file && {image: file})
       };
       const column = newColumns.get(columnId);
 

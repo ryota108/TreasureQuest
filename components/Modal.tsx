@@ -5,12 +5,11 @@ import { useModalStore } from "@/store/ModalStore";
 import { useBoardStore } from "@/store/BoardStore";
 import TaskTypeRadioGroup from "./TaskTypeRadioGroup";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
-
-// import { useUserStore } from "@/store/UserStore";
+import { useUserStore } from "@/store/UserStore";
 
 function Modal() {
   const imagePickerRef = useRef<HTMLInputElement>(null);
-  // const userData = useUserStore(state =>state.user);
+  const userData = useUserStore((state) => state.user);
   const [
     addTask,
     image,
@@ -38,8 +37,7 @@ function Modal() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newTaskInput) return;
-    addTask(newTaskInput, newTaskType, newAssign);
-    setImage(null);
+    addTask(newTaskInput, newTaskType, userData.$id, newAssign);
     closeModal();
   };
 

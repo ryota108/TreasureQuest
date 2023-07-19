@@ -5,8 +5,13 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useBoardStore } from "@/store/BoardStore";
 import { useEffect, useState } from "react";
 import AssignMenu from "./AssignMenu";
+import { useUserStore } from "@/store/UserStore";
+import Avatar from "react-avatar";
+import UserModal from "./UserModal";
 
 const Header = () => {
+  const userData = useUserStore((state) => state.user);
+  const [modal, setModal] = useState<boolean>(false);
   const [searchString, setSearchString, assignQuery, setAssignQuery, board] =
     useBoardStore((state) => [
       state.searchString,
@@ -29,11 +34,17 @@ const Header = () => {
       .get("done")
       ?.todos.map((todo) => todo.assign);
     let newArray: string[] = []; // 型アノテーションを追加
-  
-    if (typeof todoAssign !== "undefined" && typeof inprogressAssign !== "undefined" && typeof doneAssign !== "undefined") {
-      newArray = todoAssign.concat(inprogressAssign).concat(doneAssign) as string[];
+
+    if (
+      typeof todoAssign !== "undefined" &&
+      typeof inprogressAssign !== "undefined" &&
+      typeof doneAssign !== "undefined"
+    ) {
+      newArray = todoAssign
+        .concat(inprogressAssign)
+        .concat(doneAssign) as string[];
     }
-    
+
     const assignSet = Array.from(new Set(newArray));
     setAssignList(assignSet);
   }, [board]);
@@ -65,7 +76,20 @@ const Header = () => {
               Search
             </button>
           </form>
-          <AssignMenu assignList={assignList}/>
+          <div
+            className="position: relative md:p-5 h-24 flex items-center p-0 ml-2 md:m-0"
+            onMouseEnter={() => setModal(true)}
+            onMouseLeave={() => setModal(false)}
+          >
+            <Avatar
+              name={`${userData?.name}`}
+              round
+              size="50"
+              color="#0055D1"
+            />
+            {modal && <UserModal email={userData?.email} />}
+          </div>
+          <AssignMenu assignList={assignList} />
         </div>
       </div>
 
