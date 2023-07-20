@@ -1,7 +1,5 @@
 "use client";
 import { useUserStore } from "@/store/UserStore";
-import { ArrowUpCircleIcon, UserIcon } from "@heroicons/react/24/solid";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
@@ -77,42 +75,6 @@ function Page() {
             type="password"
             placeholder="Password"
           />
-          <div
-            className="flex flex-col mt-4"
-            onClick={() => {
-              imagePickerRef.current?.click();
-            }}
-          >
-            <div className="position: relative h-32 w-32 m-10px m-auto rounded-full overflow-hidden shadow-2xl transition-all hover:cursor-pointer hover:scale-105 hover:ease-in">
-              <Image
-                className="h-full w-full transition-all duration-300 ease object-cover"
-                width={100}
-                height={100}
-                alt="User Image"
-                src={imagePreview}
-              />
-              <div
-                className={`top-0 left-0 h-full w-full position: absolute bg-slate-200 align-middle ${
-                  imagePreview.length > 0 && "opacity-0"
-                }`}
-              >
-                <div className="content-icon">
-                  <UserIcon className="text-lg opacity-50" />
-                </div>
-              </div>
-              <div className="position: absolute top-0 left-0 h-full w-full">
-                <ArrowUpCircleIcon className="text-lg align-middle opacity-0 transition-all duration-300 ease-in hover:opacity-70" />
-              </div>
-              <input
-                ref={imagePickerRef}
-                onChange={handleImageChange}
-                hidden
-                className="avatar"
-                type="file"
-                accept="image/*"
-              />
-            </div>
-          </div>
           <button
             type="submit"
             className="position: relative top-8 bg-blue-500 w-2/4 m-auto rounded-md p-3 text-yellow-100 hover:shadow-2xl hover:ring-1 border-none"
